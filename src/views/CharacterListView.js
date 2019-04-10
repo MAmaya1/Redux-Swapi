@@ -7,9 +7,6 @@ import { CharacterList } from "../components";
 import {getCharacters} from '../actions';
 
 class CharacterListView extends React.Component {
-  constructor() {
-    super();
-  }
 
   componentDidMount() {
     // call our action
@@ -17,15 +14,20 @@ class CharacterListView extends React.Component {
   }
 
   render() {
-    if (this.props.isFetching) {
-      // return something here to indicate that you are fetching data
-      return (<Loader type="ThreeDots" color="#somecolor" height={80} width={80} />)
-    }
+    console.log(this.props.error)
     return (
-      <div className="CharactersList_wrapper">
-        <CharacterList characters={this.props.characters} />
+      <div>
+        {this.props.isFetching && (
+          <Loader type="ThreeDots" color="#somecolor" height={50} width={50} />
+        )}
+        {this.props.characters && (
+          <CharacterList characters={this.props.characters} />
+        )}
+        {this.props.error && (
+          alert(this.props.error)
+        )}
       </div>
-    );
+    )
   }
 }
 
@@ -36,7 +38,8 @@ const mapStateToProps = state => {
   console.log(state)
   return {
     characters: state.charsReducer.characters,
-    isFetching: state.charsReducer.isFetching
+    isFetching: state.charsReducer.isFetching,
+    error: state.charsReducer.error
   }
 }
 
